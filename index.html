@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head> 
+<body>
+    <div class="container">
+        <h2 class="text-center card-header">Simples CRUD COM BOOTSTRAP, PHP, MYSQL E AJAX</h2>
+        <div class="row">
+            <div class="col resp"></div>
+        </div>
+        <div class="formulario">
+            <form action="" id="form" class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Nome</label>
+                        <input type="text" name="nome" id="nome" class="form-control" placeholder="Digite o seu nome....">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Digite o seu email...">
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col">
+                        <label for="" class="form-label">Provincia</label>
+                        <select name="provincia" id="provincia" class="form-control">
+                            <option value="">Provincia</option>
+                            <option value="maputo">Maputo</option>
+                            <option value="gaza">Gaza</option>
+                            <option value="inhambane">Inhambane</option>
+                            <option value="beira">Beira</option>
+                            <option value="tete">Tete</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="" class="form-label">B.I./CPF</label>
+                        <input type="text" name="bi" id="" class="form-control" placeholder="numero do bilhete de identidade">
+                    </div>
+                </div>
+                <div class="row pt-4">
+                    <div class="">
+                        <input type="submit" value="Enviar" id="enviar" class="btn btn-success col-12">
+                    </div>
+                </div>
+            </form>
+        </div>
+            <div class="titulo card-header mt-3">
+                <h2 class="text-center">Cidadãos Cadastrados </h2>
+            </div>
+        
+        <table class="table">
+            <thead>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Provincia</th>
+                <th>BI</th>
+                <th colspan="2">Ação</th>
+            </thead>
+            <tbody class="TB">
+                
+            </tbody>
+        </table>
+    </div>
+    
+    <script src="js/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(document).on('submit','#form', function(e){
+                e.preventDefault();
+                 $.ajax({
+                    url: 'ajax/cadastrar.php',
+                    method: 'POST',
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false
+
+                 }).done(function(data){
+                    $(".resp").html(data);
+                 })
+            })
+            function cidadao(){
+                $.ajax({
+                    url: 'ajax/select.php',
+                    method: 'GET'
+                 }).done(function(data){
+                    $(".TB").html(data);
+                 }) 
+            }
+            setInterval(cidadao, 1000);
+
+            // script de editar 
+            $(document).on('click', '.edit', function(e){
+                e.preventDefault();
+                var id = $(this).attr("id")
+                $.ajax({
+                    url: 'ajax/select.php',
+                    method: 'POST',
+                    data:{
+                        id: id
+                    }
+                 }).done(function(data){
+                    $(".formulario").html(data);
+                 }) 
+            })
+            // script de deletar 
+            $(document).on('click', '.delete', function(e){
+                e.preventDefault();
+                var del  = $(this).attr("id")
+                $.ajax({
+                    url: 'ajax/select.php',
+                    method: 'POST',
+                    data:{
+                        del: del
+                    }
+                 }).done(function(data){
+                    $(".resp").html(data);
+                 }) 
+            })
+            // script para actualizar os dados 
+            $(document).on('submit','#update', function(e){
+                e.preventDefault();
+                 $.ajax({
+                    url: 'ajax/cadastrar.php',
+                    method: 'POST',
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false
+
+                 }).done(function(data){
+                    $(".resp").html(data);
+                 })
+            })
+        })
+    </script>
+</body>
+</html>
